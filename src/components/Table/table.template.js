@@ -4,29 +4,37 @@ const CODES = {
 }
 
 function createRow(contentData, contentInfo = "") {
+	const resizer = `<div class="row-resize" data-resize="row"></div>`
+	
 	return `
-		<div class="row">
-			<div class="row-info">${contentInfo}</div>
-			<div class="row-data">${contentData}</div>
+		<div class="row" data-type='resizable' data-row=${contentInfo}>
+			<div class="row-info">
+				${contentInfo}
+				${contentInfo && resizer}
+			</div>
+			<div class="row-data" data-row=${contentInfo}>
+				${contentData}
+			</div>
 		</div>
 	`
 }
 
-function createCol(col) {
+function createCol(col, index) {
 	return `
-		<div class="column">
+		<div class="column" data-type="resizable" data-col=${index}>
 			${col}
+			<div class="col-resize" data-resize="col"></div>
 		</div>
 	`
 }
 
-function createCell(cell) {
+function createCell(cell, index) {
 	return `
-		<div class="cell" contenteditable>${cell}</div>
+		<div class="cell" contenteditable data-col="${index}">${cell}</div>
 	`
 }
 
-export function createTable(rowsCount = 15) {
+export function createTable(rowsCount = 30) {
 	const colsCount = CODES.Z - CODES.A + 1
 	const rows = []
 	
