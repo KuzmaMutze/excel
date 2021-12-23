@@ -1,4 +1,5 @@
 import { $ } from '@core/Dom';
+import { shouldResize } from './table.functions.js';
 
 export function resizeHandler($root, event) {
     const $resizer = $(event.target);
@@ -11,14 +12,14 @@ export function resizeHandler($root, event) {
         opacity: 1,
     });
 
-    if (event.target.dataset.resize === 'col') {
+    if (shouldResize(event) === 'col') {
         event.target.classList.add('col-resize__active');
     } else {
         event.target.classList.add('row-resize__active');
     }
 
     document.onmousemove = (e) => {
-        if (event.target.dataset.resize === 'col') {
+        if (shouldResize(event) === 'col') {
             const delta = e.pageX - cords.right;
 
             $resizer.css({
@@ -37,7 +38,7 @@ export function resizeHandler($root, event) {
         document.onmousemove = null;
         document.onmouseup = null;
 
-        if (event.target.dataset.resize === 'col') {
+        if (shouldResize(event) === 'col') {
             const delta = e.pageX - cords.right;
             const value = cords.width + delta;
 

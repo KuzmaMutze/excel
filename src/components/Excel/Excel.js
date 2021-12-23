@@ -1,30 +1,40 @@
-import { $ } from "@core/Dom"
+import { $ } from '@core/Dom';
+import { Observer } from '../../core/Observer';
 
 export class Excel {
-	constructor(selector, options) {
-		this.$el = document.querySelector(selector)
-		this.components = options.components || []
-	}
+    constructor(selector, options) {
+        this.$el = document.querySelector(selector);
+        this.components = options.components || [];
+        this.observer = new Observer();
+    }
 
-	getRoot() {
-		const $root = $.create("div", "excel")
+    getRoot() {
+        const $root = $.create('div', 'excel');
 
-		this.components = this.components.map(Component => {
-			const $el = $.create("div", Component.className)
+        const componentOptions = {
+            observer: this.observer,
+        };
 
-			const component = new Component($el)
-			$el.html(component.toHTML()) 
-			$root.append($el)
+        this.components = this.components.map((Component) => {
+            const $el = $.create('div', Component.className);
 
-			return component
-		})
+            const component = new Component($el, componentOptions);
+            $el.html(component.toHTML());
+            $root.append($el);
 
-		return $root.$el
-	}
+            return component;
+        });
 
-	render() {
-		this.$el.append(this.getRoot())
+        return $root.$el;
+    }
 
-		this.components.forEach(component => component.init());
-	}
+    render() {
+        this.$el.append(this.getRoot());
+
+        this.components.forEach((component) => component.init());
+    }
+
+    destroy() {
+        this.components.forEach((component) => component.destroy());
+    }
 }
