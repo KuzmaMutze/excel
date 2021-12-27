@@ -4,6 +4,8 @@ import { resizeHandler } from './resizeHandler.js';
 import { TableSelection } from './TableSelection';
 import { shouldResize, isCell, matrix, nextSelector } from './table.functions.js';
 import { $ } from '@core/Dom';
+import { defualtStyles } from '../../constants';
+import { changeText, tableResize } from '../../redux/rootReducer';
 
 export class Table extends ExcelComponent {
     static className = 'excel__table';
@@ -24,12 +26,15 @@ export class Table extends ExcelComponent {
         super.init();
 
         const $cell = this.$root.find('[data-id="0:0"]');
-
         this.selectCell($cell);
 
         this.$sub('formula:input', (text) => {
             this.selection.current.text(text);
-            console.log('Table from formula', text);
+            this.updateTextInStore(text);
+        });
+
+        this.$sub('toolbar:applyStyle', (style) => {
+            this.selection.applyStyle(style);
         });
 
         this.$sub('formula:focus', () => {
@@ -49,9 +54,18 @@ export class Table extends ExcelComponent {
         }
     }
 
+    async resizeTable(event) {
+        try {
+            const data = await resizeHandler(this.$root, event);
+            this.$dispatch(tableResize(data));
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     onMousedown(event) {
         if (shouldResize(event)) {
-            resizeHandler(this.$root, event);
+            this.resizeTable(event);
         }
 
         if (isCell(event)) {
@@ -67,13 +81,24 @@ export class Table extends ExcelComponent {
         }
     }
 
+    updateTextInStore(text) {
+        this.$dispatch(
+            changeText({
+                id: this.selection.current.id(),
+                text,
+            }),
+        );
+    }
+
     onInput(event) {
-        this.$dispatch('table:input', $(event.target));
+        const text = $(event.target).text();
+        this.updateTextInStore(text);
     }
 
     selectCell($cell) {
         this.selection.select($cell);
-        this.$dispatch('table:select', $cell);
+        console.log($cell.getStyles(Object.keys(defualtStyles)));
+        this.$emit('table:select', $cell);
     }
 
     destroy() {
@@ -81,6 +106,6 @@ export class Table extends ExcelComponent {
     }
 
     toHTML() {
-        return createTable();
+        return createTable(undefined, this.store.getState());
     }
 }

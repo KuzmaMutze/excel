@@ -75,6 +75,13 @@ class Dom {
         Object.keys(styles).forEach((key) => (this.$el.style[key] = styles[key]));
     }
 
+    getStyles(styles = []) {
+        return styles.reduce((res, style) => {
+            res[style] = this.$el.style[style];
+            return res;
+        }, {});
+    }
+
     id(parse) {
         if (parse) {
             const parsed = this.id().split(':');

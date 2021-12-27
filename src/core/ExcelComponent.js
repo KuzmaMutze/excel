@@ -3,7 +3,9 @@ import { DomListener } from '@core/DomListener';
 export class ExcelComponent extends DomListener {
     constructor($root, options = {}) {
         super($root, options.listeners);
+        this.store = options.store;
         this.name = options.name || '';
+        this.subscribe = options.subscribe || [];
         this.observer = options.observer;
         this.unsubscribers = [];
 
@@ -19,8 +21,19 @@ export class ExcelComponent extends DomListener {
     }
 
     // notification listenir about event
-    $dispatch(event, ...args) {
+    $emit(event, ...args) {
         this.observer.dispatch(event, ...args);
+    }
+
+    $dispatch(action) {
+        this.store.dispatch(action);
+    }
+
+    // Here are only filds that we subscribed
+    storeChanged() {}
+
+    isWatching(key) {
+        this.subscribe.includes(key);
     }
 
     // subscribe event

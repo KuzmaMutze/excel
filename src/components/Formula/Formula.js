@@ -8,6 +8,7 @@ export class Formula extends ExcelComponent {
         super($root, {
             name: 'Formula',
             listeners: ['input', 'keydown'],
+            subscribe: ['currentText'],
             ...options,
         });
     }
@@ -21,16 +22,15 @@ export class Formula extends ExcelComponent {
 
             this.$formula.text(text);
         });
+    }
 
-        super.$sub('table:input', ($cell) => {
-            const text = $cell.text();
-
-            this.$formula.text(text);
-        });
+    storeChanged({ currentText }) {
+        console.log(currentText);
+        this.$formula.text(currentText);
     }
 
     onInput(event) {
-        this.$dispatch('formula:input', $(event.target).text());
+        this.$emit('formula:input', $(event.target).text());
     }
 
     onKeydown(event) {
@@ -39,7 +39,7 @@ export class Formula extends ExcelComponent {
 
         if (keys.includes(key)) {
             event.preventDefault();
-            this.$dispatch('formula:focus');
+            this.$emit('formula:focus');
         }
     }
 

@@ -1,41 +1,40 @@
-import { ExcelComponent } from '@core/ExcelComponent';
+import { ExcelStateComponent } from '../../core/ExcelStateComponent.js';
+import { createToolbar } from './toolbar.tamplate.js';
+import { $ } from './../../core/Dom';
+import { defualtStyles } from '../../constants.js';
 
-export class Toolbar extends ExcelComponent {
+export class Toolbar extends ExcelStateComponent {
     static className = 'excel__toolbar';
 
     constructor($root, options) {
         super($root, {
             name: 'Header',
-            listener: [],
+            listeners: ['click'],
             ...options,
         });
     }
 
+    prepare() {
+        this.initState(defualtStyles);
+    }
+
+    get template() {
+        return createToolbar(this.state);
+    }
+
+    onClick(e) {
+        const $target = $(e.target);
+        $target.addClass('active');
+        if ($target.data.type === 'button') {
+            const value = JSON.parse($target.data.value);
+            this.$emit('toolbar:applyStyle', value);
+
+            const key = Object.keys(value)[0];
+            this.setState({ [key]: value[key] });
+        }
+    }
+
     toHTML() {
-        return `
-			<div class="button">
-				<i class="material-icons">format_align_left</i>
-			</div>
-
-			<div class="button">
-				<i class="material-icons">format_align_center</i>
-			</div>
-
-			<div class="button">
-				<i class="material-icons">format_align_right</i>
-			</div>
-
-			<div class="button">
-				<i class="material-icons">format_bold</i>
-			</div>
-
-			<div class="button">
-				<i class="material-icons">format_italic</i>
-			</div>
-
-			<div class="button">
-				<i class="material-icons">format_underlined</i>
-			</div>
-		`;
+        return this.template;
     }
 }

@@ -20,6 +20,10 @@ export class TableSelection {
         this.group.forEach(($cell) => $cell.addClass(TableSelection.className));
     }
 
+    applyStyle(style) {
+        this.group.forEach(($el) => $el.css(style));
+    }
+
     clear() {
         this.group.forEach(($cell) => $cell.removeClass(TableSelection.className));
     }
