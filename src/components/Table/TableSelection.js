@@ -8,9 +8,13 @@ export class TableSelection {
 
     select($el) {
         this.clear();
+        $el.focus().addClass(TableSelection.className);
         this.group.push($el);
         this.current = $el;
-        $el.focus().addClass(TableSelection.className);
+    }
+
+    get selectedIds() {
+        return this.group.map(($el) => $el.id());
     }
 
     selectGroup(group) {
@@ -26,5 +30,6 @@ export class TableSelection {
 
     clear() {
         this.group.forEach(($cell) => $cell.removeClass(TableSelection.className));
+        this.group = [];
     }
 }

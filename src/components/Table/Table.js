@@ -5,7 +5,7 @@ import { TableSelection } from './TableSelection';
 import { shouldResize, isCell, matrix, nextSelector } from './table.functions.js';
 import { $ } from '@core/Dom';
 import { defualtStyles } from '../../constants';
-import { changeText, tableResize } from '../../redux/rootReducer';
+import { applyStyle, changeStyles, changeText, tableResize } from '../../redux/rootReducer';
 
 export class Table extends ExcelComponent {
     static className = 'excel__table';
@@ -33,8 +33,9 @@ export class Table extends ExcelComponent {
             this.updateTextInStore(text);
         });
 
-        this.$sub('toolbar:applyStyle', (style) => {
-            this.selection.applyStyle(style);
+        this.$sub('toolbar:applyStyle', (value) => {
+            this.selection.applyStyle(value);
+            this.$dispatch(applyStyle({ value, ids: this.selection.selectedIds }));
         });
 
         this.$sub('formula:focus', () => {
@@ -85,7 +86,7 @@ export class Table extends ExcelComponent {
         this.$dispatch(
             changeText({
                 id: this.selection.current.id(),
-                text,
+                value: text,
             }),
         );
     }
@@ -97,8 +98,10 @@ export class Table extends ExcelComponent {
 
     selectCell($cell) {
         this.selection.select($cell);
-        console.log($cell.getStyles(Object.keys(defualtStyles)));
         this.$emit('table:select', $cell);
+        debugger;
+        const styles = $cell.getStyles(Object.keys(defualtStyles));
+        this.$dispatch(changeStyles(styles));
     }
 
     destroy() {

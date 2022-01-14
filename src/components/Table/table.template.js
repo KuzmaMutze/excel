@@ -1,3 +1,6 @@
+import { defualtStyles } from '../../constants';
+import { toInlineStyles } from '../../utils/toInlineStyles';
+
 const CODES = {
     A: 65,
     Z: 90,
@@ -5,7 +8,7 @@ const CODES = {
 
 function getWidthStyle(state, index) {
     if (state[index]) {
-        return `style='width: ${state[index] + 'px'};'`;
+        return `width: ${state[index] + 'px'};`;
     }
 
     return '';
@@ -37,21 +40,22 @@ function createRow(contentData, contentInfo = '', state = {}) {
 
 function createCol(col, index, style) {
     return `
-		<div ${style} class="column" data-type="resizable" data-col=${index}>
+		<div style="${style}" class="column" data-type="resizable" data-col=${index}>
 			${col}
 			<div class="col-resize" data-resize="col"></div>
 		</div>
 	`;
 }
 
-function createCell({ dataState, colState }, row) {
+function createCell({ dataState, colState, stylesState }, row) {
     return function (_, i) {
-        const style = getWidthStyle(colState, i);
+        const width = getWidthStyle(colState, i);
         const id = `${row}:${i}`;
         const value = dataState[id] || '';
+        const styles = toInlineStyles(stylesState[id]);
 
         return `
-			<div class="cell" ${style} contenteditable data-col=${i} data-id=${id}>
+			<div class="cell" style="${width} ${styles};" contenteditable data-col=${i} data-id=${id}>
                 ${value}
             </div>
 		`;
@@ -60,8 +64,8 @@ function createCell({ dataState, colState }, row) {
 
 export function withWidthFrom(state) {
     return function (col, i) {
-        const style = getWidthStyle(state.colState, i);
-        return createCol(col, i, style);
+        const width = getWidthStyle(state.colState, i);
+        return createCol(col, i, width);
     };
 }
 

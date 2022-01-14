@@ -10,6 +10,7 @@ export class Toolbar extends ExcelStateComponent {
         super($root, {
             name: 'Header',
             listeners: ['click'],
+            subscribe: ['currentStyles'],
             ...options,
         });
     }
@@ -20,6 +21,10 @@ export class Toolbar extends ExcelStateComponent {
 
     get template() {
         return createToolbar(this.state);
+    }
+
+    storeChanged(changes) {
+        this.setState(changes.currentStyles);
     }
 
     onClick(e) {

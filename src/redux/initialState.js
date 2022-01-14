@@ -1,10 +1,21 @@
 import { storage } from '../utils/storage';
+import { defualtStyles } from './../constants';
 
 const defaultState = {
     colState: {},
     rowState: {},
     dataState: {},
+    stylesState: {},
     currentText: '',
+    currentStyles: defualtStyles,
 };
 
-export const initialState = storage('excal-state') ? storage('excal-state') : defaultState;
+const normalize = (state) => ({
+    ...state,
+    currentStyles: defualtStyles,
+    currentText: '',
+});
+
+export const initialState = storage('excal-state')
+    ? normalize(storage('excal-state'))
+    : defaultState;
