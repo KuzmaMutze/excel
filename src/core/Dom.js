@@ -21,6 +21,7 @@ class Dom {
         if (this.$el.tageName === 'input') {
             return this.$el.value.trim();
         }
+
         return this.$el.textContent.trim();
     }
 

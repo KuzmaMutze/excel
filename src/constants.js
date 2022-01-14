@@ -4,3 +4,5 @@ export const defualtStyles = {
     textDecoration: 'none',
     fontStyle: 'normal',
 };
+
+export const defualtNameTable = 'Новая таблица';

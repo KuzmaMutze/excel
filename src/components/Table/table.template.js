@@ -52,7 +52,10 @@ function createCell({ dataState, colState, stylesState }, row) {
         const width = getWidthStyle(colState, i);
         const id = `${row}:${i}`;
         const value = dataState[id] || '';
-        const styles = toInlineStyles(stylesState[id]);
+        const styles = toInlineStyles({
+            ...defualtStyles,
+            ...stylesState[id],
+        });
 
         return `
 			<div class="cell" style="${width} ${styles};" contenteditable data-col=${i} data-id=${id}>

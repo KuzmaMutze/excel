@@ -1,9 +1,8 @@
-import { toInlineStyles } from '../utils/toInlineStyles';
-
 export const TABLE_RESIZE = 'TABLE_RESIZE';
 export const CHANGE_TEXT = 'CHANGE_TEXT';
 export const APPLY_STYLE = 'APPLY_STYLE';
 export const CHANGE_STYLES = 'CHANGE_STYLES';
+export const CHANGE_NAME_TABLE = 'CHANGE_NAME_TABLE';
 
 export function rootReducer(state, action) {
     let field;
@@ -26,6 +25,11 @@ export function rootReducer(state, action) {
             return {
                 ...state,
                 currentStyles: action.data,
+            };
+        case CHANGE_NAME_TABLE:
+            return {
+                ...state,
+                nameTable: action.data,
             };
         case APPLY_STYLE:
             field = 'stylesState';
@@ -60,6 +64,11 @@ export const applyStyle = (data) => ({
 
 export const changeStyles = (data) => ({
     type: CHANGE_STYLES,
+    data,
+});
+
+export const changeNameTable = (data) => ({
+    type: CHANGE_NAME_TABLE,
     data,
 });
 

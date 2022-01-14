@@ -1,4 +1,7 @@
 import { ExcelComponent } from '@core/ExcelComponent';
+import { defualtNameTable } from '../../constants';
+import { $ } from '../../core/Dom';
+import { changeNameTable } from '../../redux/rootReducer';
 
 export class Header extends ExcelComponent {
     static className = 'excel__header';
@@ -6,14 +9,20 @@ export class Header extends ExcelComponent {
     constructor($root, options) {
         super($root, {
             name: 'Header',
-            listener: [],
+            listeners: ['input'],
             ...options,
         });
     }
 
+    onInput(event) {
+        this.$dispatch(changeNameTable(event.target.value));
+    }
+
     toHTML() {
+        const { nameTable } = this.store.getState();
+
         return `
-			<input type="text" class="input" value="Новая таблица" />
+			<input type="text" class="input" value="${nameTable || defualtNameTable}" />
 
 			<div>
 	
