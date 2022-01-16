@@ -1,4 +1,5 @@
 import { defualtStyles } from '../../constants';
+import { parse } from '../../core/parse';
 import { toInlineStyles } from '../../utils/toInlineStyles';
 
 const CODES = {
@@ -58,8 +59,16 @@ function createCell({ dataState, colState, stylesState }, row) {
         });
 
         return `
-			<div class="cell" style="${width} ${styles};" contenteditable data-col=${i} data-id=${id}>
-                ${value}
+			<div 
+                class="cell"
+                style="${width}
+                ${styles};"
+                contenteditable
+                data-col=${i}
+                data-id=${id}
+                data-value=${value || ''}
+            >
+                ${parse(value)}
             </div>
 		`;
     };

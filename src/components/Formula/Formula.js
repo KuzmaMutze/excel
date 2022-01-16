@@ -17,15 +17,13 @@ export class Formula extends ExcelComponent {
         super.init();
 
         this.$formula = this.$root.find('#formula');
-        super.$sub('table:select', ($next) => {
-            const text = $next.text();
 
-            this.$formula.text(text);
+        super.$sub('table:select', ($next) => {
+            this.$formula.text($next.data.value);
         });
     }
 
     storeChanged({ currentText }) {
-        console.log(currentText);
         this.$formula.text(currentText);
     }
 

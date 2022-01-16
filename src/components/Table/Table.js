@@ -6,6 +6,7 @@ import { shouldResize, isCell, matrix, nextSelector } from './table.functions.js
 import { $ } from '@core/Dom';
 import { defualtStyles } from '../../constants';
 import { applyStyle, changeStyles, changeText, tableResize } from '../../redux/rootReducer';
+import { parse } from '../../core/parse';
 
 export class Table extends ExcelComponent {
     static className = 'excel__table';
@@ -29,13 +30,18 @@ export class Table extends ExcelComponent {
         this.selectCell($cell);
 
         this.$sub('formula:input', (text) => {
-            this.selection.current.text(text);
+            this.selection.current.attr('data-value', text).text(parse(text));
             this.updateTextInStore(text);
         });
 
         this.$sub('toolbar:applyStyle', (value) => {
             this.selection.applyStyle(value);
-            this.$dispatch(applyStyle({ value, ids: this.selection.selectedIds }));
+            this.$dispatch(
+                applyStyle({
+                    value,
+                    ids: this.selection.selectedIds,
+                }),
+            );
         });
 
         this.$sub('formula:focus', () => {
@@ -93,6 +99,8 @@ export class Table extends ExcelComponent {
 
     onInput(event) {
         const text = $(event.target).text();
+        $(event.target).attr('data-value', text);
+
         this.updateTextInStore(text);
     }
 

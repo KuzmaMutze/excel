@@ -13,16 +13,16 @@ class Dom {
     }
 
     text(text) {
-        if (typeof text === 'string') {
+        if (typeof text !== 'undefined') {
             this.$el.textContent = text;
             return this;
         }
 
         if (this.$el.tageName === 'input') {
-            return this.$el.value.trim();
+            return this.$el.value;
         }
-
-        return this.$el.textContent.trim();
+        debugger;
+        return this.$el.textContent;
     }
 
     clear() {
@@ -36,6 +36,15 @@ class Dom {
 
     off(eventType, callback) {
         this.$el.removeEventListener(eventType, callback);
+    }
+
+    attr(name, value) {
+        if (value) {
+            this.$el.setAttribute(name, value);
+            return this;
+        }
+
+        return this.$el.setAttribute(name);
     }
 
     append(node) {

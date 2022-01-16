@@ -2,6 +2,7 @@ import { ExcelComponent } from '@core/ExcelComponent';
 import { defualtNameTable } from '../../constants';
 import { $ } from '../../core/Dom';
 import { changeNameTable } from '../../redux/rootReducer';
+import { debounse } from '../../utils/debounse';
 
 export class Header extends ExcelComponent {
     static className = 'excel__header';
