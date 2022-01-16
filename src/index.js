@@ -1,24 +1,10 @@
 import '@/scss/index.scss';
 
-import { Excel } from '@/components/Excel/Excel';
-import { Header } from '@/components/header/Header';
-import { Formula } from '@/components/Formula/Formula';
-import { Table } from '@/components/Table/Table';
-import { Toolbar } from '@/components/Toolbar/Toolbar';
-import { storage } from './utils/storage';
-import { store } from './redux/store';
-import { debounse } from './utils/debounse';
+import { Router } from '@core/routers/Router';
+import { DashboardPage } from './pages/DashboardPage';
+import { ExcelPage } from './pages/ExcelPage';
 
-const stateListener = debounse((state) => {
-    console.log(state);
-    storage('excal-state', state);
-}, 300);
-
-store.subscribe(stateListener);
-
-const excel = new Excel('#app', {
-    components: [Header, Toolbar, Formula, Table],
-    store,
+new Router('#app', {
+    dashboard: DashboardPage,
+    excel: ExcelPage,
 });
-
-excel.render();
