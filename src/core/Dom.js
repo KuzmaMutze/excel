@@ -21,7 +21,7 @@ class Dom {
         if (this.$el.tageName === 'input') {
             return this.$el.value;
         }
-        debugger;
+
         return this.$el.textContent;
     }
 

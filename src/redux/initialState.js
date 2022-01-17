@@ -1,4 +1,4 @@
-import { storage } from '../utils/storage';
+import { clone } from '../utils/clone';
 import { defualtNameTable, defualtStyles } from './../constants';
 
 const defaultState = {
@@ -9,6 +9,7 @@ const defaultState = {
     currentText: '',
     nameTable: defualtNameTable,
     currentStyles: defualtStyles,
+    openedData: new Date().toJSON(),
 };
 
 const normalize = (state) => ({
@@ -17,6 +18,6 @@ const normalize = (state) => ({
     currentText: '',
 });
 
-export const initialState = storage('excal-state')
-    ? normalize(storage('excal-state'))
-    : defaultState;
+export function normilizeInitialState(state) {
+    return state ? normalize(state) : clone(defaultState);
+}

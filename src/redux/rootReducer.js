@@ -3,6 +3,7 @@ export const CHANGE_TEXT = 'CHANGE_TEXT';
 export const APPLY_STYLE = 'APPLY_STYLE';
 export const CHANGE_STYLES = 'CHANGE_STYLES';
 export const CHANGE_NAME_TABLE = 'CHANGE_NAME_TABLE';
+export const UPDATE_DATE = 'UPDATE_DATE';
 
 export function rootReducer(state, action) {
     let field;
@@ -30,6 +31,11 @@ export function rootReducer(state, action) {
             return {
                 ...state,
                 nameTable: action.data,
+            };
+        case UPDATE_DATE:
+            return {
+                ...state,
+                openedDate: new Date().toJSON(),
             };
         case APPLY_STYLE:
             field = 'stylesState';
@@ -72,6 +78,9 @@ export const changeNameTable = (data) => ({
     data,
 });
 
+export const updateDate = () => ({
+    type: UPDATE_DATE,
+});
 // Helpers
 
 function value(state, field, action) {

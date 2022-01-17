@@ -1,8 +1,8 @@
 import { ExcelComponent } from '@core/ExcelComponent';
 import { defualtNameTable } from '../../constants';
 import { $ } from '../../core/Dom';
+import { ActiveRoute } from '../../core/routers/ActiveRoute';
 import { changeNameTable } from '../../redux/rootReducer';
-import { debounse } from '../../utils/debounse';
 
 export class Header extends ExcelComponent {
     static className = 'excel__header';
@@ -10,9 +10,20 @@ export class Header extends ExcelComponent {
     constructor($root, options) {
         super($root, {
             name: 'Header',
-            listeners: ['input'],
+            listeners: ['input', 'click'],
             ...options,
         });
+    }
+
+    onClick(event) {
+        const isDelete = $(event.target).data.value === 'delete';
+
+        if (isDelete) {
+            const decision = confirm('Вы действительно хотите удалить эту таблицу?');
+            decision && localStorage.removeItem(`excel:${ActiveRoute.param}`);
+        }
+
+        ActiveRoute.navigate('');
     }
 
     onInput(event) {
@@ -28,11 +39,11 @@ export class Header extends ExcelComponent {
 			<div>
 	
 			<div class="button">
-				<i class="material-icons">delete</i>
+				<i data-value="delete" class="material-icons">delete</i>
 			</div>
 	
 			<div class="button">
-				<i class="material-icons">exit_to_app</i>
+				<i data-value="exit" class="material-icons">exit_to_app</i>
 			</div>
 	
 			</div>
