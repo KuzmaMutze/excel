@@ -1,5 +1,6 @@
 import { defualtStyles } from '../../constants';
 import { parse } from '../../core/parse';
+import { styleHeaderRowsHandler } from '../../utils/fixedHeaderClass';
 import { toInlineStyles } from '../../utils/toInlineStyles';
 
 const CODES = {
@@ -24,10 +25,12 @@ function getHeightStyle(state, index) {
 }
 
 function createRow(contentData, contentInfo = '', state = {}) {
+    const fixedHeaderClass = styleHeaderRowsHandler(contentInfo);
     const resizer = `<div class="row-resize" data-resize="row"></div>`;
     const style = getHeightStyle(state, contentInfo);
+
     return `
-		<div ${style} class="row" data-type='resizable' data-row=${contentInfo}>
+		<div ${style} class="row ${fixedHeaderClass}" data-type='resizable' data-row=${contentInfo}>
 			<div class="row-info">
 				${contentInfo}
 				${contentInfo && resizer}
@@ -81,7 +84,7 @@ export function withWidthFrom(state) {
     };
 }
 
-export function createTable(rowsCount = 30, state = {}) {
+export function createTable(rowsCount = 50, state = {}) {
     const colsCount = CODES.Z - CODES.A + 1;
     const rows = [];
 
