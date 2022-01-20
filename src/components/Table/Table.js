@@ -29,9 +29,10 @@ export class Table extends ExcelComponent {
         const $cell = this.$root.find('[data-id="0:0"]');
         this.selectCell($cell);
 
-        this.$sub('formula:input', (text) => {
-            this.selection.current.attr('data-value', text).text(parse(text));
-            this.updateTextInStore(text);
+        this.$sub('formula:input', (value) => {
+            this.selection.current.attr('data-value', value).text(parse(value));
+
+            this.updateTextInStore(value);
         });
 
         this.$sub('toolbar:applyStyle', (value) => {
@@ -100,7 +101,7 @@ export class Table extends ExcelComponent {
     onInput(event) {
         const text = $(event.target).text();
         $(event.target).attr('data-value', text);
-
+        debugger;
         this.updateTextInStore(text);
     }
 

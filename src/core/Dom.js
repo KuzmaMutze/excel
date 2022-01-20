@@ -39,12 +39,12 @@ class Dom {
     }
 
     attr(name, value) {
-        if (value) {
+        if (value || value === '') {
             this.$el.setAttribute(name, value);
             return this;
         }
 
-        return this.$el.setAttribute(name);
+        return this.$el.getAttribute(name);
     }
 
     append(node) {

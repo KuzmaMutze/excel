@@ -11,7 +11,7 @@ export class LocalStorageClient {
 
     save(state) {
         storage(this.name, state);
-        return new Promise.resolve();
+        return Promise.resolve();
     }
 
     get() {
